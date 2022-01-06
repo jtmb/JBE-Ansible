@@ -1,12 +1,13 @@
 [linux]
 
-192.168.0.21:2002
-192.168.0.19:2002
-192.168.0.17:22
+192.168.0.21
+192.168.0.19
+192.168.0.17
 
 [linux:vars]
 
-ansible_user=ansible-james
+ansible_user=james
 ansible_password=RunStr8@1!
+ansible_port=2002
 
 # add user acc 'sudo useradd ansible-user; passwd ansible-user'
