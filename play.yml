@@ -1,5 +1,5 @@
 ---
-  - name: "Get Hardware Info"
+  - name: "Get Info"
     hosts: linux
     connection: local 
     tasks:
