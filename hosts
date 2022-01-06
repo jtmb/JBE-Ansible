@@ -7,7 +7,7 @@
 [linux:vars]
 
 ansible_user=james
-ansible_password=RunStr8@1!
+ansible_pass=RunStr8@1!
 ansible_port=2002
 
 # add user acc 'sudo useradd ansible-user; passwd ansible-user'
