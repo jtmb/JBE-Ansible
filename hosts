@@ -4,8 +4,6 @@
 192.168.0.19:2002
 192.168.0.17:22
 
-
-
 [linux:vars]
 
 ansible_user=ansible-james
