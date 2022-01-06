@@ -1,0 +1,15 @@
+[linux]
+
+192.168.0.21:2002
+192.168.0.19:2002
+
+
+[linux:vars]
+
+ansible_user=ansible-james
+ansible_password=RunStr8@1!
+
+
+
+
+; sudo useradd ansible-user; passwd ansible-user
