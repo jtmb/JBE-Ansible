@@ -1,6 +1,6 @@
 ---
   - name: "Get Hardware Info"
-    hosts: all
+    hosts: linux
     connection: local 
     tasks:
 
@@ -9,3 +9,13 @@
       register: "output"
 
     - debug: var=output.stdout_lines
+
+    - name: "Get Home DIR"
+      shell: "pwd"
+      register: "homedir"
+
+    - debug: var=homedir.stdout_lines
+
+    
+
+    
