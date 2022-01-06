@@ -1,6 +1,6 @@
 ---
   - name: "Playing with Ansible and Git"
-    hosts: all
+    hosts: linux
     connection: local 
     tasks:
 
