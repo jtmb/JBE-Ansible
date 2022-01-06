@@ -1,11 +1,11 @@
 ---
-  - name: "Playing with Ansible and Git"
+  - name: "Get Hardware Info"
     hosts: all
     connection: local 
     tasks:
 
-    - name: "just execute a ls -lrt command"
-      shell: "ls -lrt"
+    - name: "Get system hardware information"
+      shell: "lshw"
       register: "output"
 
     - debug: var=output.stdout_lines
