@@ -15,7 +15,7 @@
          ansible_password={{ssh_pass}}
 
 
-5. Set the correct IP in the inventiory.ini file and set the correct VARS in vars.yml - otherwise the ansible playbook will not work.
+5. Set the IP of the machine(s) in the inventiory.ini file and set the correct VARS in vars.yml - otherwise the ansible playbook will not work.
 
 Mandatory VARS:
 
