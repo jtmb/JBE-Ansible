@@ -12,7 +12,12 @@
 
 Mandatory VARS:
 
-   ![image](https://user-images.githubusercontent.com/86915618/165236730-7364eefb-f1c9-4fe2-9e9e-50f760466e6f.png)
+      # Linux Vars (mandatory)
+      homedir:          # Sets home dir to your SSH user
+      ssh_port:         # Sets config SSH port to change
+      sudo_pass:        # Define sudo pass 
+      ssh_pass:         # SSH pass you use to connect (if same as sudo pass, you can always a variable example:  ssh_pass: {{sudo_pass}})
+      ssh_user:         # SSH user name
 
 -------------------------------
 
