@@ -51,11 +51,14 @@ Mandatory VARS:
 
 1. Build the .devcontainer with the remote containers vs code extension:
 
-click ++> ![image](https://user-images.githubusercontent.com/86915618/165235835-12df7cb0-1a97-4c60-b5e3-4db6182efcdb.png)
-
-![image](https://user-images.githubusercontent.com/86915618/165246233-2b5e646f-972e-4ddc-8069-d023ca5a8a48.png)
+click > ![image](https://user-images.githubusercontent.com/86915618/165235835-12df7cb0-1a97-4c60-b5e3-4db6182efcdb.png) ![image](https://user-images.githubusercontent.com/86915618/165246233-2b5e646f-972e-4ddc-8069-d023ca5a8a48.png)
 
 
-3. [devcontainer.json](https://github.com/jtmb/JBE-Ansible/blob/main/.devcontainer/devcontainer.json) will automaticaly run with inventory hosts file localy (from  inside container in workspace dir as root) :
+2. [devcontainer.json](https://github.com/jtmb/JBE-Ansible/blob/main/.devcontainer/devcontainer.json) will automaticaly run with inventory hosts file localy (from  inside container in workspace dir as root) :
 
          ansible-playbook -i inventory.ini main.yml
+
+Your ansible playbook will now run when the container builds:
+
+![image](https://user-images.githubusercontent.com/86915618/165248981-506fb62a-abc9-42cd-9f06-0fb31ae7008e.png)
+
