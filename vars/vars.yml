@@ -5,13 +5,12 @@
 #############################################################################################################################################################
 
 
-# Linux Vars
+# Linux Vars (mandatory)
 homedir: "/home/{{ssh_user}}" # Sets home dir to your SSH user
 ssh_port: 2002/tcp # Sets config SSH port to change
 sudo_pass: "samplepassword1!"  # Define sudo pass 
 ssh_pass: "samplepassword2!" # SSH pass you use to connect (if same as sudo pass, you can always a variable example:  ssh_pass: {{sudo_pass}})
-ssh_user: "james" # SSH user name
-ssh_git_repo: "https://github.com/jtmb/ssh-keys-temp.git" #used for pulling temp ssh keys, replace with your own repo if forked.
+ssh_user: "user" # SSH user name
 
 # Optional Windows Dev Creds vars
 win_user:

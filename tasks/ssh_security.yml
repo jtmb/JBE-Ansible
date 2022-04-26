@@ -3,10 +3,10 @@
   shell: "ufw allow ssh && \
             ufw allow {{ssh_port}}"
 
-- name: "Download SSH Config"
+- name: "Download SSHD Config"
   shell: "cd {{homedir}} && rm -rfv {{homedir}}/provision-new-env && git clone https://github.com/jtmb/provision-new-env.git"
 
-- name: "Move SSH Config"
+- name: "Move SSHD Config"
   shell: "cp {{homedir}}/provision-new-env/sshd_config /etc/ssh/sshd_config"
 
 - name: Creates SSH hidden directory
@@ -14,7 +14,7 @@
       path: "{{homedir}}/.ssh"
       state: directory
 
-- name: "Create SSH config from ssh_key_pub variable"
+- name: "Create SSH config from ssh_key_pub variable collected in ssh_key_local.yml"
   shell: "echo {{ hostvars['localhost']['ssh_key_pub'] }} >> {{homedir}}/.ssh/id_rsa.pub"
 
 - name: "Restart SSH Service"
