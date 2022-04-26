@@ -2,9 +2,8 @@
 
 1. .dev container requires the " Remote Containers " VSCODE extension. https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 
-   ![image](https://user-images.githubusercontent.com/86915618/165235835-12df7cb0-1a97-4c60-b5e3-4db6182efcdb.png)
 
-3. Your Inventory file (inventory.ini) will have the connect information for ansible to use (SSH). 
+2. Your Inventory file (inventory.ini) will have the connect information for ansible to use (SSH). 
 
          [linux]
          172.24.136.29:22 #target server IP Address
@@ -15,7 +14,7 @@
          ansible_password={{ssh_pass}}
 
 
-5. Set the IP of the machine(s) in the inventiory.ini file and set the correct VARS in vars.yml - otherwise the ansible playbook will not work.
+3. Set the IP of the machine(s) in the inventiory.ini file and set the correct VARS in vars.yml - otherwise the ansible playbook will not work.
 
 Mandatory VARS:
 
@@ -46,7 +45,13 @@ Mandatory VARS:
 
 Running Ansible code:
 
-1. Open main.yml with your dev container.
-2. Run playbook with inventory hosts file localy (from container or from folder where main.yml is located) :
+1. Build the .devcontainer with the remote containers vs code extension:
+
+click ++> ![image](https://user-images.githubusercontent.com/86915618/165235835-12df7cb0-1a97-4c60-b5e3-4db6182efcdb.png)
+
+![image](https://user-images.githubusercontent.com/86915618/165246233-2b5e646f-972e-4ddc-8069-d023ca5a8a48.png)
+
+
+2. devcontainer.json will run with inventory hosts file localy (from  inside container in workspace dir as root) :
 
          ansible-playbook -i inventory.ini main.yml
