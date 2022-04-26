@@ -6,7 +6,14 @@
 
 3. Your Inventory file (inventory.ini) will have the connect information for ansible to use (SSH). 
 
-   ![image](https://user-images.githubusercontent.com/86915618/165235962-a25c2493-1380-4688-80cc-78c7d8279c37.png)
+         [linux]
+         172.24.136.29:22 #target server IP Address
+
+         [linux:vars]
+         ansible_user={{ssh_user}} 
+         ansible_sudo_pass={{sudo_pass}} 
+         ansible_password={{ssh_pass}}
+
 
 5. Set the correct IP in the inventiory.ini file and set the correct VARS in vars.yml - otherwise the ansible playbook will not work.
 
@@ -16,7 +23,7 @@ Mandatory VARS:
       homedir:          # Sets home dir to your SSH user
       ssh_port:         # Sets config SSH port to change
       sudo_pass:        # Define sudo pass 
-      ssh_pass:         # SSH pass you use to connect (if same as sudo pass, you can always a variable example:  ssh_pass: {{sudo_pass}})
+      ssh_pass:         # SSH pass (if same as sudo pass, you can always a variable example:  ssh_pass: {{sudo_pass}})
       ssh_user:         # SSH user name
 
 -------------------------------
