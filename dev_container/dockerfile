@@ -1,7 +1,0 @@
-FROM ubuntu:latest
-
-RUN apt update && apt-get update
-
-RUN apt-get install ansible -y
-
-WORKDIR /root/dev-env

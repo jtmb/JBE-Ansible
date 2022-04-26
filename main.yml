@@ -1,0 +1,34 @@
+---
+  # Fill in vars.yml before running
+
+  # Post-provisioning localhost
+  - name: "SSH key yes"
+    hosts: localhost
+    vars_files:
+      - vars/vars.yml
+    tasks:
+    - name: Install SSH private Key to localhost
+      include: tasks/ssh_key_local.yml
+
+# Post-provisioning VM
+  - name: "Provision Enviorment"
+    hosts: linux
+    become: true
+    vars_files:
+      - vars/vars.yml
+    tasks:
+
+    - name: Install Required Packages
+      include: tasks/packages.yml
+
+    - name: Install Docker from repo
+      include: tasks/docker.yml
+
+    - name: Setup SSH security
+      include: tasks/ssh_security.yml
+
+    - name: Install SSH keys
+      include: tasks/ssh_security.yml 
+
+    - name: Install Containers
+      include: tasks/containers.yml
