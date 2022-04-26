@@ -1,5 +1,3 @@
-# ABOUT:
-
 This playbook configures a single (or multiple) linux hosts with basic security standards and provisions a docker enviorement:
 
 1. Application Packages ( https://github.com/jtmb/JBE-Ansible/blob/main/tasks/packages.yml )
