@@ -1,16 +1,18 @@
 # REQUIREMENTS:
 
-1. .dev container requires the " Remote Containers " VSCODE extension.
-2. Your Inventory file (inventory.ini) will have the connect information for ansible to use (SSH). 
-3. Set the correct IP in the inventiory.ini file and set the correct VARS in vars.yml - otherwise the ansible playbook will not work.
+1. .dev container requires the " Remote Containers " VSCODE extension. https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+
+   ![image](https://user-images.githubusercontent.com/86915618/165235835-12df7cb0-1a97-4c60-b5e3-4db6182efcdb.png)
+
+3. Your Inventory file (inventory.ini) will have the connect information for ansible to use (SSH). 
+
+   ![image](https://user-images.githubusercontent.com/86915618/165235962-a25c2493-1380-4688-80cc-78c7d8279c37.png)
+
+5. Set the correct IP in the inventiory.ini file and set the correct VARS in vars.yml - otherwise the ansible playbook will not work.
 
 Mandatory VARS:
 
-         homedir: "/home/{{ssh_user}}" # Sets home dir to your SSH user (debian based)
-         ssh_port: 2002/tcp # Sets config SSH port to change (change as necessary)
-         sudo_pass: "samplepassword1!"  # Define sudo pass 
-         ssh_pass: "samplepassword2!" # SSH pass you use to connect (if same as sudo pass, you can always a variable example:  ssh_pass: {{sudo_pass}})
-         ssh_user: "user" # SSH user name
+   ![image](https://user-images.githubusercontent.com/86915618/165236730-7364eefb-f1c9-4fe2-9e9e-50f760466e6f.png)
 
 -------------------------------
 
@@ -18,9 +20,9 @@ Mandatory VARS:
 
 1. Application Packages ( https://github.com/jtmb/JBE-Ansible/blob/main/tasks/packages.yml )
 
-2. Docker app and official signed Key ( https://github.com/jtmb/JBE-Ansible/blob/main/tasks/docker.yml )
+2. Install and configure Fail2ban, endlessSSH.
 
-3. Install and configure Fail2ban, endlessSSH.
+3. Docker app and official signed Key ( https://github.com/jtmb/JBE-Ansible/blob/main/tasks/docker.yml )
 
 4. Change the default SSH port and restric connection to ssh key only. ( https://github.com/jtmb/JBE-Ansible/blob/main/tasks/ssh_security.yml )
 
