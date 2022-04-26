@@ -1,0 +1,8 @@
+#!!!SET VARS HERE!!!
+#Vars must be set in order for ansible deploy to work. If you are unsure about what these VARS do, search for them in play.yml
+
+homedir: "/home/{{ssh_user}}" # Sets home dir to your SSH user
+ssh_port: 2002/tcp # Sets config SSH port to change
+sudo_pass: "password"  #Define sudo pass 
+ssh_pass: "password" # SSH pass you use to connect (if same as sudo pass, you can always a variable example:  ssh_pass: {{sudo_pass}})
+ssh_user: james # SSH user name

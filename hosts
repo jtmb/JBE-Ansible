@@ -1,14 +1,2 @@
 [linux]
-
-192.168.0.21
-192.168.0.19
-192.168.0.23
-
-[linux:vars]
-
-ansible_user=james
-ansible_ssh_private_key_file=/home/james/.ssh/ansible
-#ansible_password=
-ansible_port=2002
-
-
+172.24.130.124:22 ansible_user={{ssh_user}} ansible_sudo_pass={{sudo_pass}} ansible_password={{ssh_pass}}
