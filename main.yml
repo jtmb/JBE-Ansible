@@ -2,7 +2,7 @@
   # Fill in vars.yml before running
 
   # Post-provisioning localhost
-  - name: "SSH key yes"
+  - name: "SSH key Local"
     hosts: localhost
     vars_files:
       - vars/vars.yml
@@ -18,6 +18,10 @@
       - vars/vars.yml
     tasks:
 
+    - name: Collect Server IP
+      debug:
+        msg: "{{ ansible_ssh_host }}"
+
     - name: Install Required Packages
       include: tasks/packages.yml
 
@@ -27,8 +31,20 @@
     - name: Setup SSH security
       include: tasks/ssh_security.yml
 
-    - name: Install SSH keys
-      include: tasks/ssh_security.yml 
-
     - name: Install Containers
       include: tasks/containers.yml
+
+# Debug Block
+  - name: "SSH key Local 2"
+    hosts: localhost
+    vars_files:
+      - vars/vars.yml
+    tasks:
+    
+    - name: Display Private Key
+      debug:
+        msg: "Here is your Private Key:{{ ssh_key_private }}"
+
+    - name: Display Pub Key
+      debug:
+        msg: "Here is your Pub Key: {{ ssh_key_pub }}"

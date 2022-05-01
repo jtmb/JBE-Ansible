@@ -21,7 +21,4 @@
   pip:
     name: docker
 
-- name: "Get system hardware information"
-  shell: "lshw"
-  register: "lshw"
-- debug: var=lshw.stdout_lines
+

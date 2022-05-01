@@ -13,3 +13,59 @@
       -v {{homedir}}/container-program-files/endlessh:/config `#optional` \
       --restart unless-stopped \
       lscr.io/linuxserver/endlessh"
+
+- name: Create Pihole container
+  docker_container:
+    name: "pihole"
+    image: "pihole/pihole:latest"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    tls_hostname: "pihole.home"
+    hostname: "pihole.home"
+    ports: 
+      - "{{ ansible_ssh_host }}:53:53/tcp"
+      - "{{ ansible_ssh_host }}:53:53/udp"
+      - "67:67/udp"
+      - "8091:80/tcp"
+    volumes:
+      - '{{homedir}}/container-program-files/pihole/:/etc/pihole/'
+      - '{{homedir}}/container-program-files/dnsmasq.d/:/etc/dnsmasq.d/'
+      - '{{homedir}}/container-program-files/unbound.d/:/etc/unbound/'
+    env: 
+        TZ: "America/Toronto"
+        cap_add: "NET_ADMIN"
+        WEBPASSWORD: "{{ssh_pass}}"
+
+- name: NGINX PROXY MANAGER Container
+  docker_container:
+    name: "NGINX-PROXY-MANAGER"
+    image: "jc21/nginx-proxy-manager:latest"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:80:80"
+      - "{{ ansible_ssh_host }}:81:81"
+      - "{{ ansible_ssh_host }}:443:443"
+    volumes:
+      - '{{homedir}}/container-program-files/NGINX_PROXY_MANAGER/data:/data'
+      - '{{homedir}}/container-program-files/NGINX_PROXY_MANAGER/letsencrypt:/etc/letsencrypt'
+
+- name: Create Glances SYS Monitor container
+  docker_container:
+    name: "glances-sys-monitor"
+    image: "nicolargo/glances"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    pid_mode: host
+    ports: 
+      - "8093:61208"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    env: 
+        GLANCES_OPT: "-w"
