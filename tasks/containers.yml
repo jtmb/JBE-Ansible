@@ -1,3 +1,8 @@
+
+
+# Monitoring and Security Block
+
+      
 - name: "Create Endless SSH Docker Container"
   shell: "docker rm -f endlessh && docker run -d \
       --name=endlessh \
@@ -15,7 +20,8 @@
       lscr.io/linuxserver/endlessh"
 
 - name: Create Pihole container
-  delegate_to: server1
+  ignore_errors: true #on because this container throws a falso positive when "delegate_to" is set still works tho...
+  delegate_to: "server1"
   docker_container:
     name: "pihole"
     image: "pihole/pihole:latest"
@@ -26,10 +32,9 @@
     tls_hostname: "pihole.home"
     hostname: "pihole.home"
     ports: 
-      - "{{ ansible_ssh_host }}:53:53/tcp"
-      - "{{ ansible_ssh_host }}:53:53/udp"
-      - "67:67/udp"
-      - "8091:80/tcp"
+      - "{{ ansible_ssh_host }}:53:53"
+      - "67:67"
+      - "8091:80"
     volumes:
       - '{{homedir}}/container-program-files/pihole/:/etc/pihole/'
       - '{{homedir}}/container-program-files/dnsmasq.d/:/etc/dnsmasq.d/'
@@ -38,6 +43,41 @@
         TZ: "America/Toronto"
         cap_add: "NET_ADMIN"
         WEBPASSWORD: "{{ssh_pass}}"
+
+- name: Create Glances SYS Monitor container
+  docker_container:
+    name: "glances-sys-monitor"
+    image: "nicolargo/glances"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "8093:61208"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    env: 
+        GLANCES_OPT: "-w"
+
+- name: Vault Warden Server
+  ignore_errors: true #on because this container throws a falso positive when "delegate_to" is set still works tho...
+  delegate_to: server2
+  docker_container:
+    name: "vaultwarden"
+    image: "vaultwarden/server:latest"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:8096:80"
+    volumes:
+      - '{{homedir}}/container-program-files/vault_warden:/data/'
+    env: 
+        SIGNUPS_ALLOWED: "false"
+
+# Web App Block
+      
 
 - name: NGINX PROXY MANAGER Container
   delegate_to: server1
@@ -56,18 +96,118 @@
       - '{{homedir}}/container-program-files/NGINX_PROXY_MANAGER/data:/data'
       - '{{homedir}}/container-program-files/NGINX_PROXY_MANAGER/letsencrypt:/etc/letsencrypt'
 
-- name: Create Glances SYS Monitor container
+
+- name: "Provision dirs for file server"
+  shell: "mkdir {{homedir}}/container-program-files/fileserver/ && \
+          touch {{homedir}}/container-program-files/fileserver/database.db && \
+          touch {{homedir}}/container-program-files/fileserver/filebrowser.json"
+  
+- name: File Server
+  delegate_to: server2
   docker_container:
-    name: "glances-sys-monitor"
-    image: "nicolargo/glances"
+    name: "fileserver"
+    image: "filebrowser/filebrowser"
     pull: yes
     state: started
     restart: yes
     restart_policy: unless-stopped
-    pid_mode: host
     ports: 
-      - "8093:61208"
+      - "{{ ansible_ssh_host }}:8092:80"
     volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - '{{homedir}}/container-program-files/fileserver_share_files:/srv'
+      - '{{homedir}}/container-program-files/fileserver/database.db:/database.db'
+      - '{{homedir}}/container-program-files/plex/filebrowser.json:/filebrowser.json'
     env: 
-        GLANCES_OPT: "-w"
+        TZ: "America/Toronto"
+        ADVERTISE_IP: "http://{{ ansible_ssh_host }}:32400/"
+        VERSION: "docker"
+
+- name: Plex Server
+  delegate_to: server2
+  docker_container:
+    name: "plex"
+    image: "linuxserver/plex"
+    network_mode: "host"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    volumes:
+      - '{{homedir}}/container-program-files/plex/database:/config'
+      - '{{homedir}}/container-program-files/plex/transcode:/transcode'
+      - '{{homedir}}/container-program-files/plex/fileserver_share_files/plex_files:/data'
+    env: 
+        TZ: "America/Toronto"
+        ADVERTISE_IP: "http://{{ ansible_ssh_host }}:32400/"
+        VERSION: "docker"
+
+- name: Jenkins Server
+  delegate_to: server2
+  docker_container:
+    name: "jenkins-server"
+    image: "jenkins/jenkins:lts-jdk11"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:8091:8080"
+      - "{{ ansible_ssh_host }}:50000:50000"
+    volumes:
+      - '{{homedir}}/container-program-files/jenkins/var/jenkins_home'
+    env: 
+        TZ: "America/Toronto"
+
+- name: Pause for 15 seconds to build jenkins app cache
+  pause:
+    seconds: 15
+
+- name: "Save Jenkins password to var"
+  delegate_to: server2
+  shell: "docker exec -it jenkins-server cat /var/jenkins_home/secrets/initialAdminPassword"
+  register: jenkins_secret
+
+- name: Show Jenkins Secret
+  debug:
+    msg: "{{ jenkins_secret }}"
+
+# - name: "Save Jenkins password to defaults/.generated_keys"
+#   delegate_to: localhost
+#   shell: "echo {{jenkins_secret}} >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret"
+
+# Portainer Block
+
+
+- name: "Create Data container for portainer host"
+  shell: "docker volume create portainer_data"
+
+- name: Create Portainer Host
+  delegate_to: server1
+  docker_container:
+    name: "portainer"
+    image: "portainer/portainer-ce"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:8000:8000"
+      - "{{ ansible_ssh_host }}:8090:9000"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - 'portainer_data:/data portainer/portainer-ce'
+
+- name: Create Portainer Agent
+  delegate_to: server2
+  docker_container:
+    name: "portainer_agent"
+    image: "portainer/agent"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:9091:9001"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/var/lib/docker/volumes:/var/lib/docker/volumes'
