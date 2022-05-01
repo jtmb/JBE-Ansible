@@ -22,7 +22,7 @@ Mandatory [VARS](https://github.com/jtmb/JBE-Ansible/blob/main/vars/vars.yml):
 
 ### Running Ansible code:
 
-1. Build the .devcontainer with the remote containers vs code extension.
+1. Build the .devcontainer with the remote containers vs code extension. [Instructions on using remotecontainers](https://code.visualstudio.com/docs/remote/containers-tutorial#_install-the-extension)
 
 2. [devcontainer.json](https://github.com/jtmb/JBE-Ansible/blob/main/.devcontainer/devcontainer.json) will automaticaly run with inventory hosts file localy (from  inside container in workspace dir as root) :
 
