@@ -8,7 +8,7 @@ This playbook aims to automate linux debian vm or machine provisioning with chan
 
 2. Set the IP of the machine and password + ssh user in the VARS located vars.yml - otherwise the ansible playbook will not work.
 
-Mandatory VARS:
+Mandatory [VARS](https://github.com/jtmb/JBE-Ansible/blob/main/vars/vars.yml):
 
       # Linux Vars (mandatory)
       homedir:          # Sets home dir to your SSH user
