@@ -6,21 +6,9 @@ This playbook aims to automate linux debian vm or machine provisioning with chan
 
 1. .dev container requires the " Remote Containers " VSCODE extension. https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 
+2. Set the IP of the machine and password + ssh user in the VARS located vars.yml - otherwise the ansible playbook will not work.
 
-2. Your Inventory file (inventory.ini) will have the connect information for ansible to use (SSH). 
-
-         [linux]
-         server1 ansible_host={{target_server_ip}}
-
-         [linux:vars]
-         ansible_user={{ssh_user}} 
-         ansible_sudo_pass={{sudo_pass}} 
-         ansible_password={{ssh_pass}}
-
-
-3. Set the IP of the machine and password + ssh user in the VARS located vars.yml - otherwise the ansible playbook will not work.
-
-Mandatory VARS:
+Mandatory [VARS](https://github.com/jtmb/JBE-Ansible/blob/main/vars/vars.yml):
 
       # Linux Vars (mandatory)
       homedir:          # Sets home dir to your SSH user
