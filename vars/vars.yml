@@ -11,6 +11,7 @@ ssh_user: "ansible" # SSH user name
 ssh_pass: "ansible_password" # SSH pass you use to connect 
 sudo_pass: "{{ssh_pass}}"  # Define sudo pass (if same as ssh pass, you can always a variable example:  ssh_pass: {{ssh_pass}})
 target_server_ip: "192.168.206.38" # Address of server you want to target (provision) with the playbook
+target_server_ip2: "192.168.206.113" # Address of server you want to target (provision) with the playbook
 deploy_containers: true # leave true to deploy container workload, flase to skip container workload.
 repo_name: "JBE-Ansible" #in the event your fork the repo and change the name, update repo name here.
 

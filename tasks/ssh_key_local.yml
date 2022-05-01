@@ -16,17 +16,13 @@
   shell: 'cat /root/.ssh/id_rsa.pub' 
   register: ssh_key_pub
 
-- name: "cat private key and register value in VAR"
-  shell: 'cat /root/.ssh/id_rsa' 
-  register: ssh_key_private
-
-- name: Creates generated_keys hidden folder in defaults
+- name: Creates .generated_keys hidden folder in defaults
   file:
       path: "/workspaces/{{repo_name}}/defaults/.generated_keys"
       state: directory
 
-- name: "Save PUB SSH keys to local workspace"
+- name: "Save PUB SSH key to local workspace"
   shell: "cp /root/.ssh/id_rsa.pub /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa.pub"
 
-- name: "Save Private SSH keys to local workspace"
+- name: "Save Private SSH key to local workspace"
   shell: "cp /root/.ssh/id_rsa /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa"

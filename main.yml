@@ -25,7 +25,7 @@
     - name: Install Required Packages
       include: tasks/packages.yml
 
-    - name: Install Docker from repo
+    - name: Install Docker from official signed repo
       include: tasks/docker.yml
 
     - name: Setup SSH security
