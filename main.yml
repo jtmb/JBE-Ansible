@@ -33,18 +33,3 @@
 
     - name: Install Containers
       include: tasks/containers.yml
-
-# Debug Block
-  - name: "SSH key Local 2"
-    hosts: localhost
-    vars_files:
-      - vars/vars.yml
-    tasks:
-    
-    - name: Display Private Key
-      debug:
-        msg: "Here is your Private Key:{{ ssh_key_private }}"
-
-    - name: Display Pub Key
-      debug:
-        msg: "Here is your Pub Key: {{ ssh_key_pub }}"
