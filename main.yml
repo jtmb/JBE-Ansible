@@ -32,4 +32,5 @@
       include: tasks/ssh_security.yml
 
     - name: Install Containers
+      when: deploy_containers == true
       include: tasks/containers.yml
