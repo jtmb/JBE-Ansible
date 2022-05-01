@@ -1,7 +1,7 @@
 
 # ###########################################################################################################################################################
 # #                                                              !!!SET VARS HERE!!!                                                                      # #
-# #     Vars must be set in order for ansible deploy to work. If you are unsure about what these VARS do, search for them in main.yml and get familiar.   # #
+# #   Vars must be set in order for ansible deploy to work. If you are unsure about what these VARS do, search for them in the project and get familiar.  # #
 #############################################################################################################################################################
 
 
