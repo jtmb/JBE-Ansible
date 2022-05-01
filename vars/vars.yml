@@ -10,7 +10,6 @@ homedir: "/home/{{ssh_user}}" # Sets home dir to your SSH user
 ssh_user: "james" # SSH user name
 ssh_pass: "RunStr8@1!" # SSH pass you use to connect 
 sudo_pass: "{{ssh_pass}}"  # Define sudo pass (if same as ssh pass, you can always a variable example:  ssh_pass: {{ssh_pass}})
-ssh_port: 2002/tcp # Sets sshd config SSH port to change
 target_server_ip: "192.168.205.81"
 
 # Optional Windows Dev Creds vars
