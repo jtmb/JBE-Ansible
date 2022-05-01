@@ -1,0 +1,141 @@
+
+
+# Monitoring and Security Block
+
+- name: Create Glances SYS Monitor container
+  docker_container:
+    name: "glances-sys-monitor"
+    image: "nicolargo/glances"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "8093:61208"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    env: 
+        GLANCES_OPT: "-w"
+
+- name: Vault Warden Server
+  docker_container:
+    name: "vaultwarden"
+    image: "vaultwarden/server:latest"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:8096:80"
+    volumes:
+      - '{{homedir}}/container-program-files/vault_warden:/data/'
+    env: 
+        SIGNUPS_ALLOWED: "false"
+
+# Web App Block
+
+
+- name: "Provision dirs for file server"
+  ignore_errors: true
+  no_log: true
+  shell: "mkdir {{homedir}}/container-program-files/fileserver/ && \
+          touch {{homedir}}/container-program-files/fileserver/database.db && \
+          touch {{homedir}}/container-program-files/fileserver/filebrowser.json"
+  
+- name: File Server
+  docker_container:
+    name: "fileserver"
+    image: "filebrowser/filebrowser"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:8092:80"
+    volumes:
+      - '{{homedir}}/container-program-files/fileserver_share_files:/srv'
+      - '{{homedir}}/container-program-files/fileserver/database.db:/database.db'
+      - '{{homedir}}/container-program-files/plex/filebrowser.json:/filebrowser.json'
+    env: 
+        TZ: "America/Toronto"
+        ADVERTISE_IP: "http://{{ ansible_ssh_host }}:32400/"
+        VERSION: "docker"
+
+- name: Plex Server
+  docker_container:
+    name: "plex"
+    image: "linuxserver/plex"
+    network_mode: "host"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    volumes:
+      - '{{homedir}}/container-program-files/plex/database:/config'
+      - '{{homedir}}/container-program-files/plex/transcode:/transcode'
+      - '{{homedir}}/container-program-files/plex/fileserver_share_files/plex_files:/data'
+    env: 
+        TZ: "America/Toronto"
+        ADVERTISE_IP: "http://{{ ansible_ssh_host }}:32400/"
+        VERSION: "docker"
+
+- name: Create a directory if it does not exist and set right permissios
+  ansible.builtin.file:
+    path: "{{homedir}}/container-program-files/jenkins_home"
+    state: directory
+    mode: '777'
+    
+- name: Jenkins Server
+  docker_container:
+    name: "jenkins-server"
+    image: "jenkins/jenkins:lts-jdk11"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:8091:8080"
+      - "{{ ansible_ssh_host }}:50000:50000"
+    volumes:
+      - '{{homedir}}/container-program-files/jenkins_home:/var/jenkins_home'
+    env: 
+        TZ: "America/Toronto"
+- name: Force Start Jenkins
+  ignore_errors: true
+  shell: docker stop jenkins-server && docker start jenkins-server
+
+- name: Pause for 1 minutes to build jenkins app cache
+  pause:
+    minutes: 1
+
+- name: "Save Jenkins password to var"
+  shell: "cat {{homedir}}/container-program-files/jenkins_home/secrets/initialAdminPassword"
+  register: jenkins_secret
+
+- name: Set a variable
+  ansible.builtin.set_fact:
+    myvar: "{{ jenkins_secret.stdout | to_json }}"
+
+- name: Show Jenkins Secret
+  debug:
+    var: jenkins_secret.stdout
+
+- name: "Save Jenkins password to defaults/.generated_keys"
+  delegate_to: localhost
+  shell: "echo {{ hostvars['host2']['jenkins_secret'] }} | cut -b 1000-10000 >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret"
+
+# Portainer Block
+
+- name: Create Portainer Agent
+  docker_container:
+    name: "portainer_agent"
+    image: "portainer/agent"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:9091:9001"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/var/lib/docker/volumes:/var/lib/docker/volumes'

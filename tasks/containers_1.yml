@@ -1,0 +1,79 @@
+
+
+# Monitoring and Security Block
+
+- name: Create Pihole container
+  docker_container:
+    name: "pihole"
+    image: "pihole/pihole:latest"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    tls_hostname: "pihole.home"
+    hostname: "pihole.home"
+    ports: 
+      - "{{ ansible_ssh_host }}:53:53"
+      - "67:67"
+      - "8091:80"
+    volumes:
+      - '{{homedir}}/container-program-files/pihole/:/etc/pihole/'
+      - '{{homedir}}/container-program-files/dnsmasq.d/:/etc/dnsmasq.d/'
+      - '{{homedir}}/container-program-files/unbound.d/:/etc/unbound/'
+    env: 
+        TZ: "America/Toronto"
+        cap_add: "NET_ADMIN"
+        WEBPASSWORD: "{{ssh_pass}}"
+
+- name: Create Glances SYS Monitor container
+  docker_container:
+    name: "glances-sys-monitor"
+    image: "nicolargo/glances"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "8093:61208"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    env: 
+        GLANCES_OPT: "-w"
+
+
+# Web App Block
+      
+
+- name: NGINX PROXY MANAGER Container
+  docker_container:
+    name: "NGINX-PROXY-MANAGER"
+    image: "jc21/nginx-proxy-manager:latest"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:80:80"
+      - "{{ ansible_ssh_host }}:81:81"
+      - "{{ ansible_ssh_host }}:443:443"
+    volumes:
+      - '{{homedir}}/container-program-files/NGINX_PROXY_MANAGER/data:/data'
+      - '{{homedir}}/container-program-files/NGINX_PROXY_MANAGER/letsencrypt:/etc/letsencrypt'
+
+- name: "Create Data container for portainer host"
+  shell: "docker volume create portainer_data"
+
+- name: Create Portainer Host
+  docker_container:
+    name: "portainer"
+    image: "portainer/portainer-ce"
+    pull: yes
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    ports: 
+      - "{{ ansible_ssh_host }}:8000:8000"
+      - "{{ ansible_ssh_host }}:8090:9000"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - 'portainer_data:/data portainer/portainer-ce'
