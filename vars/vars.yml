@@ -7,10 +7,10 @@
 
 # Linux Vars (mandatory)
 homedir: "/home/{{ssh_user}}" # Sets home dir to your SSH user, don;t change this unless you know what you are doing.
-ssh_user: "james" # SSH user name
-ssh_pass: "password1" # SSH pass you use to connect 
+ssh_user: "ansible" # SSH user name
+ssh_pass: "ansible_password" # SSH pass you use to connect 
 sudo_pass: "{{ssh_pass}}"  # Define sudo pass (if same as ssh pass, you can always a variable example:  ssh_pass: {{ssh_pass}})
-target_server_ip: "192.168.205.81" # Address of server you want to target (provision) with the playbook
+target_server_ip: "192.168.206.38" # Address of server you want to target (provision) with the playbook
 
 # Optional Windows Dev Creds vars
 win_user:
