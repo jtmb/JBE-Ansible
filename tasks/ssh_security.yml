@@ -3,17 +3,6 @@
   shell: "ufw allow ssh && \
             ufw allow 2002/tcp"
 
-- name: "Download SSHD Config to temp dir"
-  shell: "cd {{homedir}} && rm -rfv {{homedir}}/provision-new-env && git clone https://github.com/jtmb/provision-new-env.git"
-
-- name: "Move SSHD Config"
-  shell: "cp {{homedir}}/provision-new-env/sshd_config /etc/ssh/sshd_config"
-
-- name: "Remove SSHD Config temp dir"
-  ansible.builtin.file:
-    path: "{{homedir}}/provision-new-env"
-    state: absent
-
 - name: Creates SSH hidden directory
   file:
       path: "{{homedir}}/.ssh"
@@ -21,8 +10,8 @@
 
 - name: Copy a "id_rsa.pub" file from dev container to the remote machine
   copy:
-    src: "/root/.ssh/id_rsa.pub"
-    dest: "{{homedir}}/.ssh/id_rsa.pub"
+    src: "/workspaces/{{repo_name}}/defaults/sshd_config"
+    dest: "/etc/ssh/sshd_config"
 
 - name: "Create SSH config from ssh_key_pub variable collected in ssh_key_local.yml"
   shell: "echo {{ hostvars['localhost']['ssh_key_pub'] }} | cut -b 42-977 >> {{homedir}}/.ssh/authorized_keys"

@@ -20,13 +20,13 @@
   shell: 'cat /root/.ssh/id_rsa' 
   register: ssh_key_private
 
-- name: Creates generated_keys
+- name: Creates generated_keys hidden folder in defaults
   file:
-      path: "/workspaces/JBE-Ansible/.generated_keys"
+      path: "/workspaces/{{repo_name}}/defaults/.generated_keys"
       state: directory
 
 - name: "Save PUB SSH keys to local workspace"
-  shell: "cp /root/.ssh/id_rsa.pub /workspaces/JBE-Ansible/.generated_keys/id_rsa.pub"
+  shell: "cp /root/.ssh/id_rsa.pub /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa.pub"
 
 - name: "Save Private SSH keys to local workspace"
-  shell: "cp /root/.ssh/id_rsa /workspaces/JBE-Ansible/.generated_keys/id_rsa"
+  shell: "cp /root/.ssh/id_rsa /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa"

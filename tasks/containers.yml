@@ -15,6 +15,7 @@
       lscr.io/linuxserver/endlessh"
 
 - name: Create Pihole container
+  delegate_to: server1
   docker_container:
     name: "pihole"
     image: "pihole/pihole:latest"
@@ -39,6 +40,7 @@
         WEBPASSWORD: "{{ssh_pass}}"
 
 - name: NGINX PROXY MANAGER Container
+  delegate_to: server1
   docker_container:
     name: "NGINX-PROXY-MANAGER"
     image: "jc21/nginx-proxy-manager:latest"
