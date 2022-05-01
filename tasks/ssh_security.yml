@@ -3,11 +3,16 @@
   shell: "ufw allow ssh && \
             ufw allow 2002/tcp"
 
-- name: "Download SSHD Config"
+- name: "Download SSHD Config to temp dir"
   shell: "cd {{homedir}} && rm -rfv {{homedir}}/provision-new-env && git clone https://github.com/jtmb/provision-new-env.git"
 
 - name: "Move SSHD Config"
   shell: "cp {{homedir}}/provision-new-env/sshd_config /etc/ssh/sshd_config"
+
+- name: "Remove SSHD Config temp dir"
+  ansible.builtin.file:
+    path: "{{homedir}}/provision-new-env"
+    state: absent
 
 - name: Creates SSH hidden directory
   file:
