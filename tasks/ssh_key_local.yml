@@ -1,17 +1,12 @@
 #  localhost play
 - name: Check if Keys are already present
   stat:
-    path: /root/.ssh/id_rsa
+    path: /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa
   register: ssh_keys_exist
-
-- name: If ssh keys exist
-  debug:
-    msg: "The file or directory exists"
-  when: ssh_keys_exist.stat.exists
 
 - meta: end_play
   when: ssh_keys_exist.stat.exists
-  
+
 # - name: Remove pub key (delete file)
 #   ansible.builtin.file:
 #     path: /root/.ssh/id_rsa.pub
@@ -22,10 +17,7 @@
 #     state: absent
 
 - name: "Generate New Key"
-  shell: 'ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""' 
-
-- name: "Generate New Key"
-  shell: 'ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""' 
+  shell: 'ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""'  
 
 - name: "cat pub key and register value in VAR"
   shell: 'cat /root/.ssh/id_rsa.pub' 
