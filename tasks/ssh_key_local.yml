@@ -4,9 +4,15 @@
     path: /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa
   register: ssh_keys_exist
 
+- name: Change file ownership
+  when: ssh_keys_exist.stat.exists
+  ansible.builtin.file:
+    path: /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa.pub
+    mode: '777'
+
 - name: "cat pub key and register value in VAR when it already exists"
   when: ssh_keys_exist.stat.exists
-  shell: 'cat /root/.ssh/id_rsa.pub' 
+  shell: 'cat /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa.pub' 
   register: ssh_key_pub
 
 - meta: end_play
