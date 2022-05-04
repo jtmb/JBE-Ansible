@@ -83,7 +83,7 @@
   ansible.builtin.file:
     path: "{{homedir}}/container-program-files/jenkins_home"
     state: directory
-    mode: '400'
+    mode: '777'
     
 - name: Jenkins Server
   docker_container:

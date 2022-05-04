@@ -6,7 +6,7 @@
 
 
 # Linux Vars (mandatory)
-repo_name: "JBE-Ansible"   #in the event your fork the repo and change the name, update repo name here
+repo_name: "JBE-Ansible-1"   #in the event your fork the repo and change the name, update repo name here
 homedir: "/home/{{ssh_user}}"   # Sets home dir to your SSH user, don;t change this unless you know what you are doing.
 ssh_user: "ansible"   # SSH user name
 ssh_pass: "ansible_password"   # SSH pass you use to connect 
