@@ -14,7 +14,7 @@
     dest: "/etc/ssh/sshd_config"
 
 - name: "Create SSH config from ssh_key_pub variable collected in ssh_key_local.yml"
-  shell: "echo {{ hostvars['localhost']['ssh_key_pub'] }} | cut -b 42-977 >> {{homedir}}/.ssh/authorized_keys"
+  shell: "echo {{ hostvars['localhost']['ssh_key_pub'] }} | cut -d '[' -f 2 | cut -d ']' -f1 >> {{homedir}}/.ssh/authorized_keys"
 
 - name: "Restart SSH Service"
   shell: "systemctl restart sshd"

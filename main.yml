@@ -82,3 +82,5 @@
   - name: "Save Jenkins password to defaults/.generated_keys"
     shell: "echo {{ hostvars['host2']['jenkins_secret'] }} | cut -d '[' -f 2 | cut -d ']' -f1 >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret.yml"
 
+  - name: "Save pub key to defaults/.generated_keys"
+    shell: "echo {{ hostvars['localhost']['ssh_key_pub'] }} | cut -d '[' -f 2 | cut -d ']' -f1 >> /workspaces/{{repo_name}}/defaults/.generated_keys/authorized_keys.yml"
