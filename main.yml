@@ -62,7 +62,7 @@
     when: deploy_containers == true
     include: tasks/containers_2.yml
 
-# Lock Down SSH
+# Lock Down SSH and reboot
   # !! preferablly this is the last task, after this task SSH ports will change to 2002 and key auth forced
 - name: "Lock Down SSH"
   hosts: all
