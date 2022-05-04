@@ -1,4 +1,8 @@
 #  localhost play
+- name: Creates .ssh hidden folder in root dir
+  file:
+      path: "/root/.ssh"
+      state: directory
 
 # IF ssh key is present it will use that one
 
