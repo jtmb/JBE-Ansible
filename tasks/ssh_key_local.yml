@@ -4,6 +4,11 @@
       path: "/root/.ssh"
       state: directory
 
+- name: remove known hosts defaults
+  file:
+      path: "root/.ssh/known_hosts"
+      state: absent
+
 # IF ssh key is present it will use that one
 
 - name: Check if Keys are already present
