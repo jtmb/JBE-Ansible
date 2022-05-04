@@ -1,4 +1,7 @@
 #  localhost play
+
+# IF ssh key is present it will use that one
+
 - name: Check if Keys are already present
   stat:
     path: /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa
@@ -8,15 +11,35 @@
   when: ssh_keys_exist.stat.exists
   ansible.builtin.file:
     path: /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa.pub
-    mode: '777'
+    mode: '400'
+
+- name: Copy a existing "id_rsa.pub' file from dev container to the .ssh folder on container
+  when: ssh_keys_exist.stat.exists
+  copy:
+    src: "/workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa.pub"
+    dest: "/root/.ssh/id_rsa.pub"
+
+- name: Copy a existing "id_rsa'file from dev container to the .ssh folder on container
+  when: ssh_keys_exist.stat.exists
+  copy:
+    src: "/workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa"
+    dest: "/root/.ssh/id_rsa"
 
 - name: "cat pub key and register value in VAR when it already exists"
   when: ssh_keys_exist.stat.exists
-  shell: 'cat /workspaces/{{repo_name}}/defaults/.generated_keys/id_rsa.pub' 
+  shell: 'cat /root/.ssh/id_rsa.pub' 
   register: ssh_key_pub
+
+- name: Change file ownership for root/.ssh
+  when: ssh_keys_exist.stat.exists
+  ansible.builtin.file:
+    path: /root/.ssh/id_rsa
+    mode: '400'
 
 - meta: end_play
   when: ssh_keys_exist.stat.exists
+
+# IF No ssh key is present new one will generate
 
 - name: "Generate New Key"
   shell: 'ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""'  
