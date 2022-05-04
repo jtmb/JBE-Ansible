@@ -64,11 +64,16 @@
 
 # Lock Down SSH and reboot
   # !! preferablly this is the last task, after this task SSH ports will change to 2002 and key auth forced
-- name: "Lock Down SSH"
+- name: "Lock Down SSH and save secret"
   hosts: all
   become: true
   vars_files:
     - vars/vars.yml
   tasks:
+
   - name: Setup SSH security
     include: tasks/ssh_security.yml
+  
+  - name: "Save Jenkins password to defaults/.generated_keys"
+    shell: "echo {{ hostvars['host2']['jenkins_secret'] }} | cut -b 42-10000 >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret"
+

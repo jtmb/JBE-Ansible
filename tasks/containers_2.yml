@@ -79,11 +79,11 @@
         ADVERTISE_IP: "http://{{ ansible_ssh_host }}:32400/"
         VERSION: "docker"
 
-- name: Create a directory if it does not exist and set right permissios
+- name: Create a jenkins_home directory if it does not exist and set right permissios
   ansible.builtin.file:
     path: "{{homedir}}/container-program-files/jenkins_home"
     state: directory
-    mode: '777'
+    mode: '400'
     
 - name: Jenkins Server
   docker_container:
@@ -100,9 +100,6 @@
       - '{{homedir}}/container-program-files/jenkins_home:/var/jenkins_home'
     env: 
         TZ: "America/Toronto"
-- name: Force Start Jenkins
-  ignore_errors: true
-  shell: docker stop jenkins-server && docker start jenkins-server
 
 - name: Pause for 1 minutes to build jenkins app cache
   pause:
@@ -119,11 +116,7 @@
 - name: Show Jenkins Secret
   debug:
     var: jenkins_secret.stdout
-
-- name: "Save Jenkins password to defaults/.generated_keys"
-  delegate_to: localhost
-  shell: "echo {{ hostvars['host2']['jenkins_secret'] }} | cut -b 1000-10000 >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret"
-
+    
 # Portainer Block
 
 - name: Create Portainer Agent
