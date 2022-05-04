@@ -34,3 +34,13 @@
       -v {{homedir}}/container-program-files/endlessh:/config `#optional` \
       --restart unless-stopped \
       lscr.io/linuxserver/endlessh"
+
+
+- name: "Remove and dissable GUI in Ubuntu"
+  shell: "apt-get purge ubuntu-desktop -y && \
+            systemctl set-default multi-user"
+  ignore_errors: true
+  no_log: true
+
+- name: Rebooting ... please wait.
+  reboot:

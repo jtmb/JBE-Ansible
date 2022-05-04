@@ -11,10 +11,10 @@ homedir: "/home/{{ssh_user}}"   # Sets home dir to your SSH user, don;t change t
 ssh_user: "ansible"   # SSH user name
 ssh_pass: "ansible_password"   # SSH pass you use to connect 
 sudo_pass: "{{ssh_pass}}"    # Define sudo pass (if same as ssh pass, you can always a variable example:  ssh_pass: {{ssh_pass}})
-ssh_port: "22"   # IF running play on server with different SSH port than default 22 or IF running second time - change port here
+ssh_port: "2002"   # IF running play on server with different SSH port than default 22 or IF running second time - change port here
 target_server_ip: "192.168.0.36"   # Address of server you want to target (provision) with the playbook
 target_server_ip2: "192.168.0.37"   # Address of server you want to target (provision) with the playbook
-deploy_containers: true   # leave true to deploy container workload, flase to skip container workload.
+deploy_containers: false   # leave true to deploy container workload, flase to skip container workload.
 
 # Optional Windows Dev Creds vars
 win_user:
