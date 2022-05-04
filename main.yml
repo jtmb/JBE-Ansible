@@ -80,5 +80,5 @@
     - vars/vars.yml
   tasks:
   - name: "Save Jenkins password to defaults/.generated_keys"
-    shell: "echo {{ hostvars['host2']['jenkins_secret'] }} | cut -b 42-10000 >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret.yml"
+    shell: "echo {{ hostvars['host2']['jenkins_secret'] }} | cut -d '[' -f 2 | cut -d ']' -f1 >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret.yml"
 
