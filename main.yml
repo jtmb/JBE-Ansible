@@ -23,9 +23,11 @@
       msg: "{{ ansible_ssh_host }}"
 
   - name: Install Required Packages
+    when: deploy_packages == true
     include: tasks/packages.yml
 
   - name: Install Docker from official signed repo
+    when: deploy_packages == true
     include: tasks/docker.yml
     
 # Provision Docker Containers om server1
@@ -71,6 +73,7 @@
     - vars/vars.yml
   tasks:
   - name: Setup SSH security
+    when: deploy_ssh_key == true
     include: tasks/ssh_security.yml
 
 - name: "Get facts to localhost"
@@ -80,6 +83,8 @@
     - vars/vars.yml
   tasks:
   - name: "Save Jenkins password to defaults/.generated_keys"
+    ignore_errors: true
+    no_log: true
     shell: "echo {{ hostvars['host2']['jenkins_secret'] }} | cut -d '[' -f 2 | cut -d ']' -f1 >> /workspaces/{{repo_name}}/defaults/.generated_keys/jenkins_secret.yml"
 
   - name: "Save pub key to defaults/.generated_keys"
