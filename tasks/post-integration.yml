@@ -22,23 +22,24 @@
     body:
       Username: "{{ssh_user}}"
       Password: "{{ssh_pass}}"
-      # return_content: yes
+      return_content: yes
   register: auth
 - debug:
-    msg: “{{auth}}”
+    msg: “{{ auth.json.jwt }}”
 
 - name: Link Portainer Agent
   uri:
     url: http://192.168.0.38:8090/api/endpoints
     method: POST
     body_format: json
-    body:
+    body: #"{'Name':'test-remote','Type':1,'URL':'tcp://192.168.0.37:9091'}"
       Username: "{{ssh_user}}"
       Password: "{{ssh_pass}}"
+      Name: "test"
+      EndpointCreationType: 1
+      URL: "tcp://192.168.0.37:9091"
     force_basic_auth: yes
     headers:
         Content-Type: "application/json"
-        Authorization: "{{auth}}"
-        # access_token: ACCESS_TOKEN
-      # connection: http
-      # scope: SCOPE
+        Authorization: "{{auth.json.jwt}}"
+
