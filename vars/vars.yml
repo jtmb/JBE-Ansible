@@ -6,7 +6,7 @@
 
 
 # Linux Vars (mandatory)
-repo_name: "JBE-Ansible-1"   #in the event your fork the repo and change the name, update repo name here
+repo_name: "ansibleserversetup"   #in the event your fork the repo and change the name, update repo name here
 homedir: "/home/{{ssh_user}}"   # Sets home dir to your SSH user, don;t change this unless you know what you are doing.
 ssh_user: "ansible"   # SSH user name
 ssh_pass: "ansible_password"   # SSH pass you use to connect 
@@ -14,10 +14,13 @@ sudo_pass: "{{ssh_pass}}"    # Define sudo pass (if same as ssh pass, you can al
 ssh_port: "22"   # IF running play on server with different SSH port than default 22 or IF running second time - change port here
 target_server_ip: "192.168.0.38"   # Address of server you want to target (provision) with the playbook
 target_server_ip2: "192.168.0.37"   # Address of server you want to target (provision) with the playbook
+
+# Debug Vars
 deploy_containers: true   # leave true to deploy container workload, flase to skip container workload.
+deploy_packages: false
+deploy_ssh_key: false
 
 # Optional Windows Dev Creds vars
 win_user:
 win_pass: 
 enable_vm: 
-
