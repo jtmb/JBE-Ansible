@@ -1,0 +1,16 @@
+{
+    "AuthorizedTeams": [], 
+    "AuthorizedUsers": [], 
+    "Extensions": [], 
+    "GroupId": 1, 
+    "Id": 1, 
+    "Type": 1,
+    "Name": "test-remote", 
+    "PublicURL": "", 
+    "TLSConfig": {
+        "TLS": false, 
+        "TLSSkipVerify": false
+    }, 
+    "Type": 1, 
+    "URL": "tcp://192.168.0.37:9091"
+}"“{\n    \"changed\": false,\n    \"connection\": \"close\",\n    \"content_length\": \"190\",\n    \"content_type\": \"application/json\",\n    \"cookies\": {},\n    \"cookies_string\": \"\",\n    \"date\": \"Wed, 04 May 2022 22:51:21 GMT\",\n    \"elapsed\": 0,\n    \"failed\": false,\n    \"json\": {\n        \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhbnNpYmxlIiwicm9sZSI6MSwic2NvcGUiOiJkZWZhdWx0IiwiZXhwIjoxNjUxNzMzNDgxfQ.otoTDuQeCi1zkuLAwhmOANp51wUmQ1OHgjxiFX-Hl00\"\n    },\n    \"msg\": \"OK (190 bytes)\",\n    \"redirected\": false,\n    \"status\": 200,\n    \"url\": \"http://192.168asdasdsadsadasdsad.0.100:8090/api/auth\",\n    \"x_content_type_options\": \"nosniff\",\n    \"x_xss_protection\": \"1; mode=block\"\n}”"

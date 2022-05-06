@@ -1,0 +1,44 @@
+# - debug:
+#     msg: “Let’s Connect Portainer”
+
+# - name: Make default portainer admin
+#   uri:
+#     url: http://192.168.0.38:8090/api/users/admin/init
+#     method: POST
+#     body_format: json
+#     body:
+#       Username: "{{ssh_user}}"
+#       Password: "{{ssh_pass}}"
+#       # client_id: YOUR_CLIENT_ID
+#       # access_token: ACCESS_TOKEN
+#       # connection: http
+#       # scope: SCOPE
+
+- name: Register auth_token
+  uri:
+    url: http://{{target_server_ip}}:8090/api/auth
+    method: POST
+    body_format: json
+    body:
+      Username: "{{ssh_user}}"
+      Password: "{{ssh_pass}}"
+      # return_content: yes
+  register: auth
+- debug:
+    msg: “{{auth}}”
+
+- name: Link Portainer Agent
+  uri:
+    url: http://192.168.0.38:8090/api/endpoints
+    method: POST
+    body_format: json
+    body:
+      Username: "{{ssh_user}}"
+      Password: "{{ssh_pass}}"
+    force_basic_auth: yes
+    headers:
+        Content-Type: "application/json"
+        Authorization: "{{auth}}"
+        # access_token: ACCESS_TOKEN
+      # connection: http
+      # scope: SCOPE

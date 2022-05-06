@@ -14,7 +14,8 @@
     hostname: "pihole.home"
     ports: 
       - "{{ ansible_ssh_host }}:53:53"
-      - "67:67"
+      - "{{ ansible_ssh_host }}:53:53"
+      - "67:67/udp"
       - "8091:80"
     volumes:
       - '{{homedir}}/container-program-files/pihole/:/etc/pihole/'
