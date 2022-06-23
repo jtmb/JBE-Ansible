@@ -8,6 +8,7 @@
     - vars/vars.yml
   tasks:
   - name: Install SSH private Key to localhost
+    when: deploy_ssh_key == true 
     include: tasks/ssh_key_local.yml
 
 # Post-provisioning VM
